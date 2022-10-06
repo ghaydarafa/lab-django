@@ -71,3 +71,9 @@ def logout_user(request):
     response = HttpResponseRedirect(reverse('wishlist:login'))
     response.delete_cookie('last_login')
     return response
+
+def show_wishlist_ajax(request):
+    context = {
+        'nama': 'Rafa',
+    }
+    return render(request, "wishlist_ajax.html", context)
