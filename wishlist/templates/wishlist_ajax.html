@@ -9,12 +9,25 @@
     
     <script>
       $(document).ready(function(){
-        $("button").click(function(){
-          $("p").slideToggle();
-        });
+        e.preventDefault();
+        var form = $("form").serialize();
+        $.ajax({
+            type: "POST",
+            url: event.currentTarget.action,
+            data: form,
+            dataType: "json",
+            encode: true,
+            success: function(data)
+            {
+              alert(data);
+            }
+        }).done(function(data) {
+          console.log(data);
+        })
+
       });
 
-      $.getJSON( "http://localhost:8000/wishlist/json", function( data ) {
+      $.getJSON("http://localhost:8000/wishlist/json", function( data ) {
         var items = [];
         data.forEach(element => {
           $("table").append("<tr><td>" + element.fields.nama_barang + 
@@ -71,17 +84,18 @@
         <div class="col">
           <div class="form-group container-md border mb-5" style="background-color: white; width: fit-content; text-align: center; margin-top: 2%;">
             <h4>Input barang</h4>
-            <form method="POST" action="">
+            <form method="POST" action="{% url 'wishlist:submit_ajax' %}">
+              {% csrf_token %}
               <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Nama barang">
+                <input name="nama_barang" type="text" class="form-control" placeholder="Nama barang">
               </div>
               <div class="mb-3">
-                <input type="number" class="form-control" placeholder="Harga barang">
+                <input name="harga_barang" type="number" class="form-control" placeholder="Harga barang">
               </div>
               <div class="mb-3">
-                <input type="text" class="form-control" placeholder="Deskripsi">
+                <input name="deskripsi" type="text" class="form-control" placeholder="Deskripsi">
               </div>
-              <button type="submit" class="btn btn-primary">Submit</button>
+              <button type="submit" class="button btn btn-primary">Submit</button>
             </form>
           </div>
         </div>
